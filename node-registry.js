@@ -1,4 +1,5 @@
 module.exports = exports = (function() {
+  'use strict';
 
   return function() {
 

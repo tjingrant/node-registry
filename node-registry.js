@@ -10,42 +10,42 @@ module.exports = exports = (function() {
     var _dep = {};
 
     function getParam(func) {
-
       var fn = func.toString()
                    .replace(/((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg, '');
       var params = fn.slice(fn.indexOf('(') + 1,
                             fn.indexOf(')'))
                      .match(/([^\s,]+)/g);
       return (params || []);
+    } 
 
-    }
+    return {
 
-    this.set = function(name, func) {
-      _dict = func;
-    };
+      set: function(name, func) {
+        _dict = func;
+      },  
 
-    this.get = function(name) {
-      return _dict[name];
-    };
+      get: function(name) {
+        return _dict[name];
+      },
 
-    this.invoke = function(name, op, args, dep) {
+      invoke: function(name, op, args, dep) {
+        if (op.di) {
+          assert.equal({}, args);
+          var merged = _.merge(_dep, dep);
 
-      if (op.di) {
-        assert.equal({}, args);
-        var merged = _merge(_dep, dep);
+        } else {
+          _dict[name].apply(null, args);
+        }
+      },
 
-      } else {
-        _dict[name].apply(null, args);
+      update: function(name, func) {
+        _dict[name] = func;
+      },
+
+      delete: function(name) {
+        delete _dict[name];
       }
 
-    }
-
-    this.update = function(name, func) {
-      _dict[name] = func;
-    };
-
-    this.delete = function(name) {
-      delete _dict[name];
     };
 
   };

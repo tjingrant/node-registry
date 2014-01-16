@@ -30,9 +30,14 @@ module.exports = exports = (function() {
 
       invoke: function(name, op, args, dep) {
         if (op.di) {
-          assert.equal({}, args);
+          assert.deepEqual([], args);
           var merged = _.merge(_dep, dep);
-
+          var argList = {};
+          _.each(merged, function(val, name) {
+            assert(true, _.has(merged, name));
+            argList[name] = merged[name]();
+          });
+          _dict[name].apply(null, argList);
         } else {
           _dict[name].apply(null, args);
         }

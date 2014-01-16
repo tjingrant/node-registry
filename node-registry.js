@@ -20,8 +20,13 @@ module.exports = exports = (function() {
 
     return {
 
-      set: function(name, func) {
-        _dict = func;
+      add: function(name, func, config || {}) {
+        assert(false, _.has(_dict, name));
+        assert(true, _.isFunction(func));
+        _.extend(_dict, {
+          func: func,
+          config: config
+        });
       },  
 
       get: function(name) {

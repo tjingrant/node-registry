@@ -27,7 +27,7 @@ module.exports = exports = (function() {
           func: func,
           config: config
         });
-      },  
+      },
 
       get: function(name) {
         return _dict[name];

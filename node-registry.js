@@ -42,14 +42,12 @@ module.exports = exports = (function() {
         return _dict[name];
       },
 
-      invoke: function(name, op, args, dep) {
+      invoke: function(name, op, args) {
         op = (typeof op === "undefined") ? {} : op;
         args = (typeof args === "undefined") ? [] : args;
-        dep = (typeof dep === "undefined") ? {} : dep;
 
         if (op.di) {
           assert(true, _.has(_dict, name));
-          var merged = _.merge(_dep, dep);
           var argList = {};
           var params = getParam(_dict[name]);
           _.each(params, function(depName) {

@@ -21,6 +21,12 @@ module.exports = exports = (function() {
 
     return {
 
+      configure: function(name, val) {
+        var avail = ['async', 'di'];
+        assert(true, _.contains(avail, name));
+        _config[name] = val;
+      },
+
       add: function(name, func, config) {
         config = (typeof config === "undefined") ? {} : config;
         assert(false, _.has(_dict, name));

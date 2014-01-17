@@ -8,6 +8,7 @@ module.exports = exports = (function() {
 
     var _dict = {};
     var _dep = {};
+    var _config = {};
 
     function getParam(func) {
       var fn = func.toString()
@@ -20,7 +21,8 @@ module.exports = exports = (function() {
 
     return {
 
-      add: function(name, func, config || {}) {
+      add: function(name, func, config) {
+        config = (typeof config === "undefined") ? {} : config;
         assert(false, _.has(_dict, name));
         assert(true, _.isFunction(func));
         _.extend(_dict, {
@@ -30,29 +32,43 @@ module.exports = exports = (function() {
       },
 
       get: function(name) {
+        assert(true, _.has(_dict, name));
         return _dict[name];
       },
 
       invoke: function(name, op, args, dep) {
+        op = (typeof op === "undefined") ? {} : op;
+        args = (typeof args === "undefined") ? [] : args;
+        dep = (typeof dep === "undefined") ? {} : dep;
+
         if (op.di) {
-          assert.deepEqual([], args);
+          assert(true, _.has(_dict, name));
           var merged = _.merge(_dep, dep);
           var argList = {};
-          _.each(merged, function(val, name) {
-            assert(true, _.has(merged, name));
-            argList[name] = merged[name]();
+          var params = getParam(_dict[name]);
+          _.each(params, function(depName) {
+            assert(true, _.has(merged, depName));
+            argList[depName] = merged[depName]();
           });
           _dict[name].apply(null, argList);
         } else {
+          assert(true, _.has(_dict, name));
           _dict[name].apply(null, args);
         }
       },
 
-      update: function(name, func) {
-        _dict[name] = func;
+      update: function(name, func, config) {
+        config = (typeof config === "undefined") ? {} : config;
+        assert(true, _.has(_dict, name));
+        assert(true, _.isFunction(func));
+        _dict[name] = {
+          func: func,
+          config: config
+        };
       },
 
       delete: function(name) {
+        assert(true, _.has(_dict, name));
         delete _dict[name];
       }
 

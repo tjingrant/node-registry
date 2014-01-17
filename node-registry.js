@@ -7,8 +7,9 @@ module.exports = exports = (function() {
   return function() {
 
     var _dict = {};
-    var _dep = {};
     var _config = {};
+    var _dep = {};
+    var _depConfig = {};
 
     function getParam(func) {
       var fn = func.toString()
@@ -31,7 +32,7 @@ module.exports = exports = (function() {
         config = (typeof config === "undefined") ? {} : config;
         assert(false, _.has(_dict, name));
         assert(true, _.isFunction(func));
-        _.extend(_dict, {
+        _dict = _.extend(_dict, {
           func: func,
           config: config
         });
@@ -74,6 +75,37 @@ module.exports = exports = (function() {
       delete: function(name) {
         assert(true, _.has(_dict, name));
         delete _dict[name];
+      },
+
+      dependency: {
+
+        configure: function(name, val) {
+          var avail = ['async'];
+          assert(true, _.contains(avail, name));
+          _depConfig[name] = val;
+        },     
+
+        add: function(name, val, config) {
+          assert(false, _.has(_dep, name));
+          _dep[name] = {
+            dep: val,
+            config: config
+          };
+        },
+
+        update: function(name, val, config) {
+          assert(true, _.has(_dep, name));
+          _dep[name] = {
+            dep: val,
+            config: config
+          };
+        },
+
+        delete: function(name) {
+          assert(true, _.has(_dep, name));
+          delete _dep[name];
+        }
+
       }
 
     };

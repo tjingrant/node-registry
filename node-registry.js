@@ -7,9 +7,14 @@ module.exports = exports = (function() {
   return function() {
 
     var _dict = {};
-    var _config = {};
+    var _config = {
+      async: false,
+      di: false
+    };
     var _dep = {};
-    var _depConfig = {};
+    var _depConfig = {
+      async: false
+    };
 
     function getParam(func) {
       var fn = func.toString()
@@ -19,6 +24,10 @@ module.exports = exports = (function() {
                      .match(/([^\s,]+)/g);
       return (params || []);
     } 
+
+    function resolveConfig(global, individual) {
+      return (typeof individual == "undefined") ? global : individual;
+    }
 
     return {
 
